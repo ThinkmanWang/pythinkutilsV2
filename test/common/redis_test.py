@@ -18,8 +18,12 @@ from pythinkutils.common.StringUtils import *
 def main():
     r = redis.StrictRedis(connection_pool=ThinkRedis.get_conn_pool_ex())
     r.set("FXXK", get_current_time_str())
-    szRet = r.get("FXXK")
-    g_logger.info(szRet)
+    byteRet = r.get("FXXK")
+    g_logger.info(byteRet)
+
+    if byteRet is not None:
+        szRet = str(byteRet, encoding="utf-8")
+        g_logger.info(szRet)
 
     szID = acquire_lock_with_timeout(r, "migu_register_fxxk", acquire_timeout=10, lock_timeout=60)
     if False == is_empty_string(szID):

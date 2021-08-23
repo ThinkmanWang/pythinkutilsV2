@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "637ae9b1fcc70610ed38c395f3143e4ba3bb4a145fb70990d7441bdbeca7a52d"
+            "sha256": "aee52a304c4509f8378151980dda707978d1b45883fa23ab5ea03fc417edcc7f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -119,10 +119,10 @@
         },
         "aiologger": {
             "hashes": [
-                "sha256:1b6b8f00d74a588339b657ff60ffa9f64c53873887a008934c66e1a673ea68cd"
+                "sha256:a50c3a91ce7b92ed33ec97b04a6c78e831cb65070b04272f16d4a462cfc3624f"
             ],
             "index": "pypi",
-            "version": "==0.6.1"
+            "version": "==0.4.0rc1"
         },
         "aiomysql": {
             "hashes": [
@@ -495,7 +495,7 @@
                 "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86",
                 "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==2.8.2"
         },
         "rainbow": {
@@ -542,7 +542,7 @@
                 "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926",
                 "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==1.16.0"
         },
         "text-unidecode": {

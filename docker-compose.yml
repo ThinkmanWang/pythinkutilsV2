@@ -1,4 +1,7 @@
 version: '2'
 services:
-  pythinkutils:
+  prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
     command: bash -c "python main.py"

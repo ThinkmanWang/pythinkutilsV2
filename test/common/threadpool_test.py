@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import time
+
 from multiprocessing.pool import ThreadPool
 from pythinkutils.common.log import g_logger
 
@@ -11,6 +13,13 @@ def main():
 
     for i in range(100):
         pool.apply_async(foo, (i, ))
+
+    time.sleep(5)
+
+    for i in range(5):
+        pool.apply_async(foo, (i, ))
+
+    time.sleep(5)
 
     pool.close()
     pool.join()

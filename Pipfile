@@ -29,6 +29,7 @@ pyjwt = "*"
 requests = "*"
 aiohttp-requests = "*"
 aiohttp = "*"
+asyncio-pool = "*"
 
 [dev-packages]
 

@@ -7,7 +7,7 @@ from pythinkutils.aio.common.aiolog import g_aio_logger
 
 async def cor_worker(nNum):
     while True:
-        await g_aio_logger.info("FXXK %d" % (nNum))
+        await g_aio_logger.info("FXXK %d" % (nNum, ))
         await asyncio.sleep(5)
 
 

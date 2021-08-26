@@ -5,9 +5,9 @@ from asyncio_pool import AioPool
 
 from pythinkutils.aio.common.aiolog import g_aio_logger
 
-async def cor_worker():
+async def cor_worker(nNum):
     while True:
-        await g_aio_logger.info("FXXK")
+        await g_aio_logger.info("FXXK %d" % (nNum))
         await asyncio.sleep(5)
 
 
@@ -15,7 +15,7 @@ async def start_pool(nSize):
     pool = AioPool(size=nSize)
 
     for i in range(nSize):
-        pool.spawn_n(cor_worker())
+        pool.spawn_n(cor_worker(i))
 
     await pool.join()
 

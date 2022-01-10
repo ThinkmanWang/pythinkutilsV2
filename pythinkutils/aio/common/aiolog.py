@@ -10,7 +10,7 @@ import os
 import time
 from logging import LogRecord
 from tempfile import NamedTemporaryFile
-from aiofiles.threadpool import AsyncTextIOWrapper
+# from aiofiles.threadpool import AsyncTextIOWrapper
 from aiologger import Logger
 
 from aiologger.handlers.files import (
@@ -33,7 +33,7 @@ def setup_custom_logger():
 
     handler = AsyncTimedRotatingFileHandler(
         filename="log/think.log",
-        when=RolloverInterval.HOURS,
+        when=RolloverInterval.DAYS,
         backup_count=48,
     )
     formatter = logging.Formatter("[%(asctime)s] %(threadName)s - %(pathname)s %(funcName)s():%(lineno)d  %(levelname)s %(message)s")

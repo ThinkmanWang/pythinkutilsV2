@@ -16,7 +16,7 @@ import re
 from pythinkutils.common.FileUtils import *
 
 class ParallelTimedRotatingFileHandler(logging.handlers.TimedRotatingFileHandler):
-    def __init__(self, filename, when='h', interval=1, backupCount=0, encoding=None, delay=False, utc=False, postfix = ".log"):
+    def __init__(self, filename, when='D', interval=1, backupCount=0, encoding=None, delay=False, utc=False, postfix = ".log"):
 
         self.origFileName = filename
         self.when = when.upper()

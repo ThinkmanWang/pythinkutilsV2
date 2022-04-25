@@ -13,6 +13,8 @@ from aioredis import Redis
 async def main():
     # conn_pool = await ThinkAioRedisPool.get_default_conn_pool()
 
+    await g_aio_logger.info("Hello World")
+
     r = Redis(connection_pool=await ThinkAioRedisPool.get_conn_pool_ex())
     try:
         await r.set('fxxxxk', get_current_time_str())

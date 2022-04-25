@@ -6,7 +6,6 @@ import os
 import sys
 import os
 import asyncio
-import aiorwlock
 
 from abc import *
 from aiokafka import AIOKafkaProducer
@@ -15,12 +14,12 @@ from pythinkutils.aio.common.aiolog import g_aio_logger
 
 class ThinkAioKafkaProducer(object):
     g_dictConnPool = {}
-    g_rwlock = aiorwlock.RWLock()
+    g_lock = asyncio.Lock()
 
     @classmethod
     async def send(cls, szHost, szTopic, szMsg):
         if cls.g_dictConnPool.get(szHost) is None:
-            async with cls.g_rwlock.writer:
+            async with cls.g_lock:
                 if cls.g_dictConnPool.get(szHost) is None:
                     try:
                         producer = AIOKafkaProducer(loop=asyncio.get_event_loop(), bootstrap_servers=szHost)

@@ -5,14 +5,13 @@ import os
 
 import asyncio
 import aiomysql
-import aiorwlock
 
 from pythinkutils.config.Config import *
 from pythinkutils.common.log import g_logger
 
 class ThinkAioMysql(object):
     g_dictConnPool = {}
-    g_rwlock = aiorwlock.RWLock()
+    g_lock = asyncio.Lock()
 
     @classmethod
     async def get_conn_pool_ex(cls, szGroup="mysql" ):
@@ -44,7 +43,7 @@ class ThinkAioMysql(object):
         szHostPortDb = "{}:{}-{}".format(host, port, db)
 
         if cls.g_dictConnPool.get(szHostPortDb) is None:
-            async with cls.g_rwlock.writer:
+            async with cls.g_lock:
                 if cls.g_dictConnPool.get(szHostPortDb) is None:
                     connPool = await aiomysql.create_pool(
                         minsize=mincached

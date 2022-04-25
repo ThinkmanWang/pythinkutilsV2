@@ -5,7 +5,6 @@ import os
 
 import asyncio
 import aiopg
-import aiorwlock
 import pymysql
 import psycopg2
 
@@ -16,7 +15,7 @@ from pythinkutils.common.log import g_logger
 
 class ThinkAioPG(object):
     g_dictConnPool = {}
-    g_rwlock = aiorwlock.RWLock()
+    g_lock = asyncio.Lock
 
     @classmethod
     async def get_conn_pool_ex(cls, szGroup="postgresql"):
@@ -51,7 +50,7 @@ class ThinkAioPG(object):
         szHostPortDb = "{}:{}-{}".format(host, port, db)
 
         if cls.g_dictConnPool.get(szHostPortDb) is None:
-            async with cls.g_rwlock.writer:
+            async with cls.g_lock:
                 if cls.g_dictConnPool.get(szHostPortDb) is None:
                     dsn = 'dbname={} user={} password={} host={} port={}'.format(db, user, password, host, port)
                     connPool = await aiopg.create_pool(

@@ -24,8 +24,7 @@ class JsonPathFinder:
             else:
                 check = value
             if check == target:
-                print(value["string_value"])
-                yield current_path
+                yield value
             if isinstance(value, (dict, list)):
                 yield from self.iter_node(value, current_path, target)
 
@@ -46,18 +45,6 @@ if __name__ == '__main__':
 
     print('开始测试按 Key 搜索...')
     finder = JsonPathFinder(json_data)
-    path_list = finder.find_all('title')
-    data = finder.data
-    # for path in path_list:
-    #     print(path)
-
-    # print('开始测试按 Value 搜索：...')
-
-    # value_finder = JsonPathFinder(json_data, mode='value')
-    # path_lits = value_finder.find_all(103)
-    # for path in path_lits:
-    #     print('path: ', path)
-    #     value = json.loads(json_data)
-    #     for step in path:
-    #         value = value[step]
-    #     assert value == 103
+    lstVal = finder.find_all('title')
+    for val in lstVal:
+        print(val)

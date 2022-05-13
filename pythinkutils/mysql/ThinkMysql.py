@@ -64,7 +64,7 @@ class ThinkMysql:
         return cls.g_dictConnPool.get(szHostPortDb)
 
     @classmethod
-    def query(cls, conn, szSql, a, args=None) -> Optional[list]:
+    def query(cls, conn, szSql, args=None) -> Optional[list]:
         c = conn.cursor(mysql.cursors.DictCursor)
         c.execute(szSql, args)
         rows = c.fetchall()
@@ -84,8 +84,35 @@ class ThinkMysql:
 
     @classmethod
     def get_last_insert_id(cls, conn) -> int:
-        lstRows = cls.query(conn, "SELECT LAST_INSERT_ID() as id")
-        if lstRows is None or len(lstRows) <= 0:
+        try:
+            lstRows = cls.query(conn, "SELECT LAST_INSERT_ID() as id")
+            if lstRows is None or len(lstRows) <= 0:
+                return 0
+
+            return lstRows[0]["id"]
+        except Exception as ex:
             return 0
 
-        return lstRows[0]["id"]
+    @classmethod
+    def get_all_tables(cls, conn):
+        lstRet = []
+
+        c = conn.cursor()
+        try:
+            c.execute('''
+                show tables
+            ''')
+            rows = c.fetchall()
+
+            for row in rows:
+                lstRet.append(row[0])
+
+        except Exception as e:
+            pass
+        finally:
+            return lstRet
+
+    @classmethod
+    def get_table_detail(cls, conn, szTable) -> list:
+        lstRow = cls.query(conn, "SHOW FULL COLUMNS FROM {}".format(szTable))
+        return lstRow

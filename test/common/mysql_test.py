@@ -49,6 +49,10 @@ def query_test():
 def main():
     insert_test()
 
+    conn = ThinkMysql.get_conn_pool_ex().connection("")
+    print(ThinkMysql.get_all_tables(conn))
+    print(ThinkMysql.get_table_detail(conn, "t_test"))
+
     lstData = query_test()
     if lstData is None or len(lstData) <= 0:
         g_logger.info("NO DATA")

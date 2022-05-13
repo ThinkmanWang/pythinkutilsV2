@@ -79,3 +79,11 @@ class ThinkMysql:
             conn.commit()
 
         return nRet
+
+    @classmethod
+    def get_last_insert_id(cls, conn):
+        lstRows = cls.query(conn, "SELECT LAST_INSERT_ID() as id")
+        if lstRows is None or len(lstRows) <= 0:
+            return 0
+
+        return lstRows[0]["id"]

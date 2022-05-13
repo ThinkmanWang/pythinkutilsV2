@@ -22,8 +22,10 @@ def insert_test():
                                   '''
                                   , ("FXXXXK", )
                                   , True)
-
         g_logger.info(nRet)
+
+        g_logger.info(ThinkMysql.get_last_insert_id(conn))
+
     except Exception as ex:
         g_logger.info(ex)
     finally:

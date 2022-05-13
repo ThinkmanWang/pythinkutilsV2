@@ -2,6 +2,8 @@
 
 import sys
 import os
+from typing import Optional, Any
+
 import pymysql as mysql
 import threading
 from dbutils.pooled_db import PooledDB
@@ -62,7 +64,7 @@ class ThinkMysql:
         return cls.g_dictConnPool.get(szHostPortDb)
 
     @classmethod
-    def query(cls, conn, szSql, args=None):
+    def query(cls, conn, szSql, a, args=None) -> Optional[list]:
         c = conn.cursor(mysql.cursors.DictCursor)
         c.execute(szSql, args)
         rows = c.fetchall()
@@ -70,7 +72,7 @@ class ThinkMysql:
         return rows
 
     @classmethod
-    def execute(cls, conn, szSql, args=None, bAutoCommit=True):
+    def execute(cls, conn, szSql, args=None, bAutoCommit=True) -> int:
         cur = conn.cursor(mysql.cursors.DictCursor)
 
         nRet = cur.execute(szSql, args)
@@ -81,7 +83,7 @@ class ThinkMysql:
         return nRet
 
     @classmethod
-    def get_last_insert_id(cls, conn):
+    def get_last_insert_id(cls, conn) -> int:
         lstRows = cls.query(conn, "SELECT LAST_INSERT_ID() as id")
         if lstRows is None or len(lstRows) <= 0:
             return 0

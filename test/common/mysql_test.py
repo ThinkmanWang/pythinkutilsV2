@@ -11,21 +11,21 @@ from pythinkutils.common.object2json import *
 
 def insert_test():
     conn = ThinkMysql.get_conn_pool().connection()
+
     try:
-        cur = conn.cursor(pymysql.cursors.DictCursor)
+        nRet = ThinkMysql.execute(conn
+                                  , '''
+                                      INSERT INTO 
+                                        t_test(name)
+                                      VALUES
+                                        (%s)
+                                  '''
+                                  , ("FXXXXK", )
+                                  , True)
 
-        nRet = cur.execute('''
-            INSERT INTO 
-                t_test(name)
-            VALUES
-                (%s)
-        ''', ("FXXK"))
-
-        conn.commit()
-
-        return nRet
+        g_logger.info(nRet)
     except Exception as ex:
-        pass
+        g_logger.info(ex)
     finally:
         conn.close()
 
@@ -34,15 +34,7 @@ def query_test():
     c = conn.cursor(pymysql.cursors.DictCursor)
 
     try:
-        c.execute('''
-            SELECT
-                *
-            FROM
-                t_test
-        ''')
-
-        rows = c.fetchall()
-
+        rows = ThinkMysql.query(conn, '''SELECT * FROM t_test''')
         return rows
     except Exception as e:
         g_logger.error(e)

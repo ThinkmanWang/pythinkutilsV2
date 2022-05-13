@@ -40,7 +40,7 @@ class JsonPathFinder:
 
 
 if __name__ == '__main__':
-    with open('sample.json', ) as f:
+    with open('api.json', ) as f:
         json_data = f.read()
 
     print('开始测试按 Key 搜索...')

@@ -60,3 +60,22 @@ class ThinkMysql:
 
 
         return cls.g_dictConnPool.get(szHostPortDb)
+
+    @classmethod
+    def query(cls, conn, szSql, args=None):
+        c = conn.cursor(mysql.cursors.DictCursor)
+        c.execute(szSql, args)
+        rows = c.fetchall()
+
+        return rows
+
+    @classmethod
+    def execute(cls, conn, szSql, args=None, bAutoCommit=True):
+        cur = conn.cursor(mysql.cursors.DictCursor)
+
+        nRet = cur.execute(szSql, args)
+
+        if bAutoCommit:
+            conn.commit()
+
+        return nRet

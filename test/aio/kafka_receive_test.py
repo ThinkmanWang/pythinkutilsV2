@@ -12,17 +12,35 @@ from pythinkutils.aio.common.aiolog import g_aio_logger
 from pythinkutils.aio.kafka.ThinkAioKafkaProducer import ThinkAioKafkaProducer
 from pythinkutils.common.datetime_utils import *
 
+from asyncio_pool import AioPool
+
 class TestConsumer(ThinkAioKafkaConsumer):
 
     def __init__(self, szHost, szTopic, szGroup):
         super().__init__(szHost, szTopic, szGroup)
+        self.m_pool = None
+        asyncio.gather(self.start_pool())
+
+    async def start_pool(self):
+        self.m_pool = AioPool(size=32)
+
+    async def msg_worker(self, szMsg):
+        await g_aio_logger.info(szMsg)
+        # await asyncio.sleep(10)
 
     async def on_msg(self, msg):
         # await asyncio.sleep(5)
         # random.randint
         # print("consumed: ", msg.topic, msg.partition, msg.offset, msg.key, msg.value, msg.timestamp)
+        await g_aio_logger.info("TEST")
         szMsg = str(msg.value, "utf-8")
-        await g_aio_logger.info(szMsg)
+        self.m_pool.spawn_n(self.msg_worker(szMsg))
+        self.m_pool.spawn_n(self.msg_worker(szMsg))
+        self.m_pool.spawn_n(self.msg_worker(szMsg))
+        self.m_pool.spawn_n(self.msg_worker(szMsg))
+        self.m_pool.spawn_n(self.msg_worker(szMsg))
+        self.m_pool.spawn_n(self.msg_worker(szMsg))
+        # await g_aio_logger.info(szMsg)
 
 async def send_test():
     while True:

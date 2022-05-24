@@ -32,7 +32,13 @@ class ThinkAioKafkaConsumer(object):
 
     async def on_start(self):
         while True:
-            consumer = AIOKafkaConsumer(self.m_szTopic, loop=asyncio.get_event_loop(), bootstrap_servers=self.m_szHost, group_id=self.m_szGroup)
+            g_aio_logger.info("Start Kafka consumer")
+            consumer = AIOKafkaConsumer(self.m_szTopic
+                                        , loop=asyncio.get_event_loop()
+                                        , bootstrap_servers=self.m_szHost
+                                        , group_id=self.m_szGroup
+                                        , auto_commit_interval_ms=1000
+                                        , auto_offset_reset="earliest")
 
             try:
                 await consumer.start()

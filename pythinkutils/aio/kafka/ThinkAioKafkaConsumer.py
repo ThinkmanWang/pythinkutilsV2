@@ -12,11 +12,21 @@ from pythinkutils.config.Config import g_config
 class ThinkAioKafkaConsumer(object):
     __metaclass__ = ABCMeta
 
-    def __init__(self, szHost, szTopic, szGroup):
+    def __init__(self
+                 , szHost
+                 , szTopic
+                 , szGroup
+                 , timeout_ms=0
+                 , max_records=1024):
         self.m_szHost = szHost
         self.m_szTopic = szTopic
         self.m_szGroup = szGroup
         self.m_bStarted = False
+
+        if timeout_ms <= 10:
+            timeout_ms = 10
+        self.m_nTimeout = timeout_ms
+        self.m_nMaxRecords = max_records
 
     def start(self):
         if self.m_bStarted:
@@ -43,10 +53,23 @@ class ThinkAioKafkaConsumer(object):
             try:
                 await consumer.start()
 
+                while True:
+                    result = await consumer.getmany(timeout_ms=self.m_nTimeout, max_records=self.m_nMaxRecords)
+                    for tp, messages in result.items():
+                        if messages:
+                            lstTask = []
+                            for msg in messages:
+                                task = asyncio.create_task(self.on_msg(msg))
+                                lstTask.append(task)
+
+                            for task in lstTask:
+                                await task
+
+                            await consumer.commit({tp: messages[-1].offset + 1})
+
                 # Consume messages
-                async for msg in consumer:
-                    await self.on_msg(msg)
-                    # print("consumed: ", msg.topic, msg.partition, msg.offset, msg.key, msg.value, msg.timestamp)
+                # async for msg in consumer:
+                #     await self.on_msg(msg)
             except Exception as e:
                 pass
                 # await g_aio_logger.error(e)

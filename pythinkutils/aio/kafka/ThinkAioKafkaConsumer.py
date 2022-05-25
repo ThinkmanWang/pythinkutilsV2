@@ -66,13 +66,15 @@ class ThinkAioKafkaConsumer(object):
                                 await task
 
                             await consumer.commit({tp: messages[-1].offset + 1})
+                        else:
+                            await asyncio.sleep(1)
 
                 # Consume messages
                 # async for msg in consumer:
                 #     await self.on_msg(msg)
             except Exception as e:
-                pass
-                # await g_aio_logger.error(e)
+                await g_aio_logger.error(e)
+                await asyncio.sleep(1)
             finally:
-                consumer.stop()
+                await consumer.stop()
 

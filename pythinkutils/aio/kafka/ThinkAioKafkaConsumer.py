@@ -76,5 +76,8 @@ class ThinkAioKafkaConsumer(object):
                 await g_aio_logger.error(e)
                 await asyncio.sleep(1)
             finally:
-                await consumer.stop()
+                try:
+                    await consumer.stop()
+                except Exception as ex:
+                    pass
 

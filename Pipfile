@@ -30,6 +30,8 @@ requests = "*"
 aiohttp-requests = "*"
 aiohttp = "*"
 asyncio-pool = "*"
+aiorabbit = "*"
+aio-pika = "*"
 
 [dev-packages]
 

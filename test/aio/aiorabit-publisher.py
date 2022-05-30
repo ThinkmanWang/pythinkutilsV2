@@ -16,9 +16,7 @@ async def main(loop):
 
     channel: aio_pika.abc.AbstractChannel = await connection.channel()
 
-    exchange = await channel.declare_exchange(routing_key, type="fanout")
-
-    await exchange.publish(
+    await channel.default_exchange.publish(
         aio_pika.Message(
             body=get_current_time_str().encode()
         ),

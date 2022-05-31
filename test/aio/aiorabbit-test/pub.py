@@ -8,10 +8,10 @@ from aio_pika import DeliveryMode, ExchangeType, Message, connect
 from pythinkutils.aio.rabbitmq.ThinkRabbitMQPub import ThinkRabbitMQPub
 from pythinkutils.common.datetime_utils import *
 from pythinkutils.aio.common.aiolog import g_aio_logger
-from pythinkutils.config.Config import ThinkConfig
+from pythinkutils.config.Config import g_config
 
 async def main():
-    conn = await ThinkRabbitMQPub.conn(ThinkConfig.get_default_config().get("rabbitmq", "url"), ThinkConfig.get_default_config().get("rabbitmq", "broadcast"))
+    conn = await ThinkRabbitMQPub.conn(g_config.get("rabbitmq", "url"), g_config.get("rabbitmq", "broadcast"))
 
     for i in range(10):
         message_body = get_current_time_str().encode()

@@ -7,7 +7,7 @@ import aio_pika.abc
 
 async def main(loop):
     connection = await aio_pika.connect_robust(
-        "amqp://admin:123456@10.0.0.37/", loop=loop
+        "amqp://admin:123456@10.0.0.37", loop=loop
     )
 
     async with connection:

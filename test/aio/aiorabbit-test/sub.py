@@ -11,7 +11,7 @@ class MyConsumer(ThinkRabbitMQSub):
 def main():
     loop = asyncio.get_event_loop()
 
-    myConsumer = MyConsumer("amqp://admin:123456@10.0.0.37/", "fxxk")
+    myConsumer = MyConsumer("amqp://admin:123456@10.0.0.37", "fxxk")
     myConsumer.start()
 
     loop.run_forever()

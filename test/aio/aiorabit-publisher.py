@@ -9,7 +9,7 @@ from pythinkutils.common.datetime_utils import *
 async def main(loop):
     # Explicit type annotation
     connection: aio_pika.RobustConnection = await aio_pika.connect_robust(
-        "amqp://admin:123456@10.0.0.37/", loop=loop
+        "amqp://admin:123456@10.0.0.37", loop=loop
     )
 
     routing_key = "think-queue"

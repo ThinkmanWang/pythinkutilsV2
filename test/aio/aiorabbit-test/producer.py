@@ -13,7 +13,7 @@ from pythinkutils.aio.common.aiolog import g_aio_logger
 async def main():
     for i in range(10):
         routing_key = "think-queue"
-        conn = await ThinkRabbitMQProducer.conn("amqp://admin:123456@10.0.0.37/", routing_key)
+        conn = await ThinkRabbitMQProducer.conn("amqp://admin:123456@10.0.0.37", routing_key)
         await g_aio_logger.info("%s" % (conn, ))
 
         await conn.publish(

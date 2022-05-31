@@ -10,7 +10,7 @@ from pythinkutils.common.datetime_utils import *
 from pythinkutils.aio.common.aiolog import g_aio_logger
 
 async def main():
-    conn = await ThinkRabbitMQPub.conn("amqp://admin:123456@10.0.0.37/", "fxxk")
+    conn = await ThinkRabbitMQPub.conn("amqp://admin:123456@10.0.0.37", "fxxk")
 
     for i in range(10):
         message_body = get_current_time_str().encode()

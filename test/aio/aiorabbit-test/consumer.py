@@ -3,6 +3,7 @@
 import asyncio
 
 from pythinkutils.aio.rabbitmq.ThinkRabbitMQConsumer import ThinkRabbitMQConsumer
+from pythinkutils.config.Config import ThinkConfig
 
 class MyConsumer(ThinkRabbitMQConsumer):
     async def on_msg(self, msg):
@@ -11,7 +12,7 @@ class MyConsumer(ThinkRabbitMQConsumer):
 def main():
     loop = asyncio.get_event_loop()
 
-    myConsumer = MyConsumer("amqp://admin:123456@10.0.0.37", "think-queue")
+    myConsumer = MyConsumer(ThinkConfig.get_default_config().get("rabbitmq", "url"), ThinkConfig.get_default_config().get("rabbitmq", "queue"))
     myConsumer.start()
 
     loop.run_forever()

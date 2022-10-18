@@ -71,6 +71,7 @@ class ThinkPG:
 #
 #     # cur.execute("INSERT INTO t_test_col(id, name, score) VALUES (%s, %s, %s)", (1024000, "Thinkman Wang", 99))
 #     # conn.commit()
+#     # ThinkPG.get_conn_pool_ex().putconn(conn)
 #
 # if __name__ == '__main__':
 #     main()

@@ -57,7 +57,7 @@ class CSVUtils(object):
                     szHeader += ","+_szHeader
                 nPos += 1
         else:
-            pass
+            lstHeader = szHeader.split(",")
 
         szHeader = szHeader.strip()
         szHeader += "\n"

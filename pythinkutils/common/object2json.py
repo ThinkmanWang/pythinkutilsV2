@@ -22,8 +22,11 @@ import json
 '''
 嵌套对象转json字符串
 '''
-def obj2json(obj):
-    return json.dumps(obj, cls = ObjJsonEncoder)
+def obj2json(obj, indent=0):
+    if indent <= 0:
+        return json.dumps(obj, cls = ObjJsonEncoder)
+    else:
+        return json.dumps(obj, cls=ObjJsonEncoder, indent=indent)
 
 '''
 递归 py对象转dict

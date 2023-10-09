@@ -27,6 +27,23 @@ class FileUtils(object):
         return lstRet
 
     @classmethod
+    def find_folder(cls, szFolder, szPattern):
+        lstRet = []
+
+        for path, subdirs, files in os.walk(szFolder):
+            szFolderName = str(path).replace(os.path.dirname(path), "")
+            szFolderName = szFolderName.replace("/", "")
+
+            if fnmatch(szFolderName, szPattern):
+                lstRet.append(path)
+
+            # for name in files:
+            #     if fnmatch(name, szPattern):
+            #         lstRet.append(os.path.join(path, name))
+
+        return lstRet
+
+    @classmethod
     def copy_file(cls, src, dest):
         if dest.endswith("banner_moon.png"):
             print("FXXK")
@@ -37,6 +54,21 @@ class FileUtils(object):
             shutil.copy(src, dest)
         except Exception as ex:
             pass
+
+    @classmethod
+    def remove_file(cls, szFile):
+        try:
+            os.remove(szFile)
+        except Exception as ex:
+            pass
+
+    @classmethod
+    def remove_dir(cls, szFile):
+        try:
+            shutil.rmtree(szFile)
+        except Exception as ex:
+            pass
+
     @classmethod
     def read_file_to_str(cls, szPath):
         file = None

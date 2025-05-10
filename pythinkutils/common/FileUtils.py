@@ -27,6 +27,16 @@ class FileUtils(object):
         return lstRet
 
     @classmethod
+    def ls_folder(cls, szFolder):
+        lstRet = [f for f in os.listdir(szFolder) if os.path.isdir(os.path.join(szFolder, f))]
+        return lstRet
+
+    @classmethod
+    def ls_files(cls, szFolder):
+        lstRet = [f for f in os.listdir(szFolder) if os.path.isfile(os.path.join(szFolder, f))]
+        return lstRet
+
+    @classmethod
     def find_folder(cls, szFolder, szPattern):
         lstRet = []
 
@@ -120,3 +130,13 @@ class FileUtils(object):
         except Exception as ex:
             return None
 
+
+    @classmethod
+    def move_file(cls, szSrc, szDest):
+        try:
+            # 将源文件移动到目标文件夹
+            shutil.move(szSrc, szDest)
+        except FileNotFoundError:
+            pass
+        except Exception as e:
+            pass

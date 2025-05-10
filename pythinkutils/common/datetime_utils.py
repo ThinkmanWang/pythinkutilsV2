@@ -2,7 +2,7 @@
 
 import time
 from datetime import date, timedelta
-# import datetime
+import datetime
 
 def get_timestamp():
     return int(time.time())
@@ -70,14 +70,14 @@ def last_day_of_month(nDiffMon = 0):
     return end_day(first_day_of_month(nDiffMon))
 
 def date_between_start_end(szStart, szEnd):
-    dateStart = datetime.strptime(szStart, '%Y-%m-%d')
-    dateEnd = datetime.strptime(szEnd, '%Y-%m-%d')
+    dateStart = datetime.datetime.strptime(szStart, '%Y-%m-%d')
+    dateEnd = datetime.datetime.strptime(szEnd, '%Y-%m-%d')
 
     lstDate = []
     lstDate.append(szStart)
 
     while dateStart < dateEnd:
-        dateStart += timedelta(days=1)
+        dateStart += datetime.timedelta(days=1)
         lstDate.append(dateStart.strftime('%Y-%m-%d'))
 
     return lstDate

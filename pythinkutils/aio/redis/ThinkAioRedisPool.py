@@ -5,6 +5,7 @@ import os
 
 import asyncio
 import aioredis
+import aiorwlock
 
 from pythinkutils.config.Config import *
 from pythinkutils.common.datetime_utils import *
@@ -13,7 +14,7 @@ from pythinkutils.common.log import g_logger
 class ThinkAioRedisPool(object):
 
     g_dictConnPool = {}
-    g_lock = asyncio.Lock()
+    g_rwlock = aiorwlock.RWLock()
 
     @classmethod
     async def get_conn_pool_ex(cls, szGroup="redis"):
@@ -36,7 +37,7 @@ class ThinkAioRedisPool(object):
         szHostPortDb = "{}:{}-{}".format(host, port, db)
         if cls.g_dictConnPool.get(szHostPortDb) is None:
 
-            async with cls.g_lock:
+            async with cls.g_rwlock.writer:
                 if cls.g_dictConnPool.get(szHostPortDb) is None:
                     connPool = cls.mk_conn_pool(host, password, port, db, max_connections)
 

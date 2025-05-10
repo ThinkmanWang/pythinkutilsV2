@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pythinkutils.common.StringUtils import *
+from pythinkutils.common.object2json import *
 
 class CSVUtils(object):
 
@@ -34,6 +35,17 @@ class CSVUtils(object):
             return lstRet
 
     @classmethod
+    def _dictitem_2_str(cls, item):
+        if str == type(item):
+            return "\"{}\"".format(item)
+        elif dict == type(item):
+            return "\"{}\"".format(obj2json(item).replace("\"", "\\\""))
+        elif list == type(item):
+            return "\"{}\"".format(obj2json(item).replace("\"", "\\\""))
+        else:
+            return "\"{}\"".format(str(item))
+
+    @classmethod
     def dictlist_2_csv(cls, lstData, szFilePath, szHeader = None):
         def read_header_from_dict(dictItem):
             lstHeader = []
@@ -46,8 +58,9 @@ class CSVUtils(object):
         if is_empty_string(szFilePath) or lstData is None or len(lstData) <= 0:
             return
 
-        lstHeader = read_header_from_dict(lstData[0])
+        lstHeader = []
         if is_empty_string(szHeader):
+            lstHeader = read_header_from_dict(lstData[0])
             szHeader = ""
             nPos = 0
             for _szHeader in lstHeader:
@@ -57,7 +70,7 @@ class CSVUtils(object):
                     szHeader += ","+_szHeader
                 nPos += 1
         else:
-            lstHeader = szHeader.split(",")
+            lstHeader = str(szHeader).split(",")
 
         szHeader = szHeader.strip()
         szHeader += "\n"
@@ -70,9 +83,24 @@ class CSVUtils(object):
                 nPos = 0
                 for _header in lstHeader:
                     if 0 == nPos:
-                        szLine = "{}".format(dictItem[_header])
+                        if _header in dictItem.keys():
+                            szLine = cls._dictitem_2_str(dictItem[_header])
+                            # if "," in str(dictItem[_header]):
+                            #     szLine = "{}".format(dictItem[_header])
+                            # else:
+                            #     szLine = "\'{}\'".format(dictItem[_header])
+                        else:
+                            szLine = " "
                     else:
-                        szLine += ",{}".format(dictItem[_header])
+                        if _header in dictItem.keys():
+                            szLine += ",{}".format(cls._dictitem_2_str(dictItem[_header]))
+
+                            # if "," in str(dictItem[_header]):
+                            #     szLine += ",{}".format(dictItem[_header])
+                            # else:
+                            #     szLine += ",\"{}\"".format(dictItem[_header])
+                        else:
+                            szLine += ", "
 
                     nPos += 1
                 szLine += "\n"

@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from openpyxl import load_workbook
+from openpyxl import Workbook
+
+from pythinkutils.common.StringUtils import *
+from pythinkutils.common.object2json import *
+
 class ExcelUtils(object):
     @classmethod
     def excel_to_list(cls, szExcel):
@@ -30,6 +36,67 @@ class ExcelUtils(object):
             nLine += 1
 
         return lstRet
+
+    @classmethod
+    def read_excel(cls, szFile, szSheet, nRow, nCol, workbook = None) -> str:
+        if workbook is None:
+            workbook = load_workbook(szFile)
+
+        sheet = workbook[szSheet]
+        return str(sheet.cell(row=nRow, column=nCol).value)
+
+    @classmethod
+    def write_excel(cls, szFile, szSheet, nRow, nCol, szVal, workbook=None) -> str:
+        if workbook is None:
+            workbook = load_workbook(szFile)
+
+        if is_empty_string(szSheet):
+            sheet = workbook.active
+        else:
+            sheet = workbook[szSheet]
+
+        sheet.cell(row=nRow, column=nCol, value=szVal)
+        return str(sheet.cell(row=nRow, column=nCol).value)
+
+    @classmethod
+    def _dictitem_2_str(cls, item):
+        if str == type(item):
+            return item
+        elif dict == type(item):
+            return obj2json(item)
+        elif list == type(item):
+            return obj2json(item)
+        else:
+            return item
+
+    @classmethod
+    def dictlist_2_xls(cls, lstData, szFilePath, szSheet, lstHeader):
+        wb = Workbook()
+        if is_empty_string(szSheet):
+            sheet = wb.active
+        else:
+            sheet = wb.create_sheet(szSheet)
+
+        # make hearer
+        for nCol in range(len(lstHeader)):
+            cls.write_excel(None, szSheet, 1, nCol+1, lstHeader[nCol], wb)
+
+        # make data
+        for nRow in range(len(lstData)):
+            for nCol in range(len(lstHeader)):
+                if lstHeader[nCol] in lstData[nRow].keys():
+                    szVal = cls._dictitem_2_str(lstData[nRow][lstHeader[nCol]])
+                    cls.write_excel(None, szSheet, nRow+2, nCol+1, szVal, wb)
+                else:
+                    continue
+
+        wb.save(szFilePath)
+
+    @classmethod
+    def all_sheet(cls, szFile) -> list:
+        workbook = load_workbook(szFile)
+        return workbook.sheetnames
+
 
 # def main():
 #     from pythinkutils.common.log import g_logger

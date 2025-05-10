@@ -6,6 +6,7 @@ import asyncio
 
 from abc import *
 from aiokafka import AIOKafkaConsumer
+from pythinkutils.common.datetime_utils import *
 from pythinkutils.aio.common.aiolog import g_aio_logger
 from pythinkutils.config.Config import g_config
 
@@ -17,7 +18,8 @@ class ThinkAioKafkaConsumer(object):
                  , szTopic
                  , szGroup
                  , timeout_ms=0
-                 , max_records=1024):
+                 , max_records=1024
+                 , checkpoint_interval=10):
         self.m_szHost = szHost
         self.m_szTopic = szTopic
         self.m_szGroup = szGroup
@@ -27,6 +29,8 @@ class ThinkAioKafkaConsumer(object):
             timeout_ms = 10
         self.m_nTimeout = timeout_ms
         self.m_nMaxRecords = max_records
+        self.m_nCheckpointInterval = checkpoint_interval
+        self.m_nLastCheckpoint = 0
 
     def start(self):
         if self.m_bStarted:
@@ -38,6 +42,10 @@ class ThinkAioKafkaConsumer(object):
 
     @abstractmethod
     async def on_msg(self, msg):
+        pass
+
+    @abstractmethod
+    async def on_checkpoint(self):
         pass
 
     async def on_start(self):
@@ -68,6 +76,10 @@ class ThinkAioKafkaConsumer(object):
                             await consumer.commit({tp: messages[-1].offset + 1})
                         else:
                             await asyncio.sleep(1)
+
+                    if get_timestamp() - self.m_nLastCheckpoint > self.m_nCheckpointInterval:
+                        self.m_nLastCheckpoint = get_timestamp()
+                        await self.on_checkpoint()
 
                 # Consume messages
                 # async for msg in consumer:
